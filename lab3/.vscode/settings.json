@@ -1,0 +1,5 @@
+{
+    "json.trace.server": "messages",
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "black"
+}
