@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 pos_num = 50    #正例个数
 pos_mean = [1, 2]    #正例均值，二维
 pos_cov = neg_cov = np.mat([[0.3, 0], [0, 0.4]])      #满足朴素贝叶斯正反例协方差
-fpos_cov = fneg_cov = np.mat([[0.3, 0.3], [0.3, 0.4]])    #不满足朴素贝叶斯正反例协方差
+fpos_cov = fneg_cov = np.mat([[0.3, 0.7], [0.9, 0.4]])    #不满足朴素贝叶斯正反例协方差
 neg_num = 50         #反例个数
 neg_mean = [-1, -2]    #反例均值，二维
 lam = np.exp(-10)      #惩罚项
@@ -61,20 +61,6 @@ def diff(x, y, learn_rate, lam):
     print(w1)
     print(coef)
     return coef, w1
-# def hess(x, w):
-    hess = matlib.zeros((x.shape[1], x.shape[1]))
-    for i in range(pos_num+neg_num):
-        hess += x[i].T * x[i] * sig(w.T*x[i].T) * (1 - sig(w.T*x[i].T))
-    hess += lam*matlib.eye((x.shape[1]))
-    return hess.I
-# def newton(x, y):
-    w = matlib.zeros((x.shape[1], 1))
-    grad = diff(x, y, w)
-    w = w-hess(x, w)*grad
-    while np.linalg.norm(grad) > cur:
-        grad = diff(x, y, w)
-        w = w-hess(x, w)*grad
-    return w
 
 #画出二维散点图和分类函数线
 def plt2d(x, y, discriminant, title):
@@ -149,9 +135,9 @@ def fit(x, y, w):
 def main():
     test(0, pos_cov, neg_cov)  # 满足朴素贝叶斯，无惩罚项
     test(lam,pos_cov,neg_cov)    #满足朴素贝叶斯，有惩罚项
-    test(0,fpos_cov,fneg_cov)      #不满足朴素贝叶斯，无惩罚项
-    test(lam,fpos_cov,fneg_cov)        #不满足朴素贝叶斯，有惩罚项
-    uci_test("lab2\Skin_NonSkin.data")
+    test(0,pos_cov=fpos_cov,neg_cov=fneg_cov)      #不满足朴素贝叶斯，无惩罚项
+    test(lam,pos_cov=fpos_cov,neg_cov=fneg_cov)        #不满足朴素贝叶斯，有惩罚项
+    uci_test("Skin_NonSkin.data")
 
 
 main()
